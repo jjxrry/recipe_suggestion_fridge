@@ -2,6 +2,8 @@ from typing import List, Dict, Tuple, Set
 import random
 from collections import defaultdict
 
+#hi
+
 # CONSTANTS:
 MONDAY = 0
 TUESDAY = 1
