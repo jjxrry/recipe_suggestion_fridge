@@ -1,6 +1,7 @@
 from typing import List, Dict, Tuple, Set
 import random
 from collections import defaultdict
+from data import fridge_one, fridge_two, fridge_three, recipes
 
 # CONSTANTS:
 MONDAY = 0
@@ -27,16 +28,18 @@ prior: CuisinePrior = [
     {"indian": 0.45, "chinese": 0.30, "japanese": 0.25},  # Saturday
 ]
 
+
 def get_valid_recipes(recipes: List[Recipe], fridge: Fridge) -> List[Recipe]:
     """Return recipes that can be made with current fridge ingredients."""
     valid_recipes = []
     available_ingredients = {item[0] for item in fridge}
-    
+
     for name, cuisine, ingredients in recipes:
         if all(ingredient in available_ingredients for ingredient in ingredients):
             valid_recipes.append((name, cuisine, ingredients))
-    
+
     return valid_recipes
+
 
 def calculate_cuisine_probabilities(valid_recipes: List[Recipe], prior_given_day: Dict):
     """Calculate adjusted probabilities based on prior preferences and day of week."""
@@ -73,7 +76,9 @@ def calculate_cuisine_probabilities(valid_recipes: List[Recipe], prior_given_day
         return
 
     # Compute adjusted probabilities for each cuisine.
-    final_cuisine_probs = {cuisine: count / total_valid for cuisine, count in cuisine_counts.items()}
+    final_cuisine_probs = {
+        cuisine: count / total_valid for cuisine, count in cuisine_counts.items()
+    }
 
     # Group recipes by cuisine.
     recipes_by_cuisine = defaultdict(list)
@@ -94,7 +99,9 @@ def calculate_cuisine_probabilities(valid_recipes: List[Recipe], prior_given_day
         return
 
     max_prob = max(recipe_probabilities.values())
-    best_recipes = [name for name, prob in recipe_probabilities.items() if prob == max_prob]
+    best_recipes = [
+        name for name, prob in recipe_probabilities.items() if prob == max_prob
+    ]
 
     # Output the winning recipe(s)
     print("Recommended recipe(s):")
@@ -103,74 +110,6 @@ def calculate_cuisine_probabilities(valid_recipes: List[Recipe], prior_given_day
 
 
 if __name__ == "__main__":
-    recipes = [
-        # Indian recipes
-        ("Chicken Curry", "indian", ["chicken", "onion", "spices"]),
-        ("Paneer Tikka", "indian", ["paneer", "yogurt", "spices"]),
-        ("Chana Masala", "indian", ["chickpeas", "tomato", "onion", "spices"]),
-        ("Lamb Vindaloo", "indian", ["lamb", "potato", "spices", "vinegar"]),
-
-        # Chinese recipes
-        ("Sweet and Sour Pork", "chinese", ["pork", "pineapple", "peppers"]),
-        ("Kung Pao Chicken", "chinese", ["chicken", "peanuts", "chili", "scallions"]),
-        ("Mapo Tofu", "chinese", ["tofu", "ground pork", "chili bean paste", "scallions"]),
-
-        # Japanese recipes
-        ("Sushi", "japanese", ["rice", "fish", "seaweed"]),
-        ("Ramen", "japanese", ["noodles", "pork", "egg", "scallions"]),
-        ("Tempura", "japanese", ["shrimp", "vegetables", "tempura batter"]),
-    ]
-
-    # Fridge One:
-    # - Indian: "chicken", "onion", "spices" (for Chicken Curry)
-    # - Chinese: "pork", "pineapple", "peppers" (for Sweet and Sour Pork)
-    # - Japanese: "rice", "fish", "seaweed" (for Sushi)
-    fridge_one = [
-        ("chicken", "meat", 2),
-        ("onion", "vegetable", 5),
-        ("spices", "condiment", 3),
-        ("pork", "meat", 3),
-        ("pineapple", "fruit", 1),
-        ("peppers", "vegetable", 3),
-        ("rice", "grain", 5),
-        ("fish", "seafood", 3),
-        ("seaweed", "vegetable", 2),
-    ]
-
-    # Fridge Two:
-    # - Indian: "chickpeas", "tomato", "onion", "spices" (for Chana Masala)
-    # - Chinese: "chicken", "peanuts", "chili", "scallions" (for Kung Pao Chicken)
-    # - Japanese: "noodles", "pork", "egg", "scallions" (for Ramen)
-    fridge_two = [
-        ("chickpeas", "legume", 4),
-        ("tomato", "vegetable", 3),
-        ("onion", "vegetable", 5),
-        ("spices", "condiment", 3),
-        ("chicken", "meat", 2),
-        ("peanuts", "nut", 2),
-        ("chili", "vegetable", 3),
-        ("scallions", "vegetable", 4),
-        ("noodles", "grain", 3),
-        ("pork", "meat", 2),
-        ("egg", "dairy", 4),
-    ]
-
-    # Fridge Three:
-    # - Indian: "paneer", "yogurt", "spices" (for Paneer Tikka)
-    # - Chinese: "tofu", "ground pork", "chili bean paste", "scallions" (for Mapo Tofu)
-    # - Japanese: "shrimp", "vegetables", "tempura batter" (for Tempura)
-    fridge_three = [
-        ("paneer", "dairy", 2),
-        ("yogurt", "dairy", 2),
-        ("spices", "condiment", 3),
-        ("tofu", "soy", 2),
-        ("ground pork", "meat", 1),
-        ("chili bean paste", "condiment", 1),
-        ("scallions", "vegetable", 4),
-        ("shrimp", "seafood", 2),
-        ("vegetables", "vegetable", 5),
-        ("tempura batter", "baking", 1),
-    ]
 
     valid_one = get_valid_recipes(recipes, fridge_one)
     valid_two = get_valid_recipes(recipes, fridge_two)
@@ -208,15 +147,15 @@ if __name__ == "__main__":
 #         if a == '+A' and b == '+B':
 #             c = '+C' if random.random() < 0.2 else '-C'
 #
-#         # P(+C | +A, -B) = 0.4, P(-C | +A, -B) = 0.6, 
+#         # P(+C | +A, -B) = 0.4, P(-C | +A, -B) = 0.6,
 #         elif a == '+A' and b == '-B':
 #             c = '+C' if random.random() < 0.4 else '-C'
-#             
-#         # P(+C | -A, +B) = 0.6, P(-C | -A, +B) = 0.4, 
+#
+#         # P(+C | -A, +B) = 0.6, P(-C | -A, +B) = 0.4,
 #         elif a == '-A' and b == '+B':
 #             c = '+C' if random.random() < 0.6 else '-C'
 #
-#         # P(+C | -A, +B) = 0.8, P(-C | -A, -B) = 0.2, 
+#         # P(+C | -A, +B) = 0.8, P(-C | -A, -B) = 0.2,
 #         else:
 #             c = '+C' if random.random() < 0.8 else '-C'
 #
