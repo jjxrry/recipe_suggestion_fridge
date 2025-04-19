@@ -26,6 +26,7 @@ prior: CuisinePrior = [
     {"indian": 0.30, "chinese": 0.50, "japanese": 0.20},  # Thursday
     {"indian": 0.35, "chinese": 0.35, "japanese": 0.30},  # Friday
     {"indian": 0.45, "chinese": 0.30, "japanese": 0.25},  # Saturday
+    {"indian": 0.45, "chinese": 0.30, "japanese": 0.25},  # SUNDAY
 ]
 
 
