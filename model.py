@@ -1,7 +1,6 @@
-from typing import List, Dict, Tuple, Set
+from typing import List, Dict, Tuple
 import random
 from collections import defaultdict
-from data import fridge_one, fridge_two, fridge_three, recipes
 
 # CONSTANTS:
 MONDAY = 0
@@ -51,6 +50,7 @@ def calculate_cuisine_probabilities(valid_recipes: List[Recipe], prior_given_day
     # Identify cuisines with at least one valid recipe.
     valid_cuisines = {recipe[1] for recipe in valid_recipes}
     cuisine_counts = {cuisine: 0 for cuisine in valid_cuisines}
+    # {indian: 0, chinese: 0, japanese: 0}
 
     # Simulation: Draw cuisines based on the prior and count if valid.
     for _ in range(SAMPLE):
